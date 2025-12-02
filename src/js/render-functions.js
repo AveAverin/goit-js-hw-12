@@ -1,17 +1,19 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const galleryContainer = document.querySelector(".gallery");
-const loaderEl = document.querySelector(".loader");
+const galleryContainer = document.querySelector('.gallery');
+const loaderEl = document.querySelector('.loader');
+const loadMoreBtn = document.querySelector('.load-more');
 
-const LOADER_ACTIVE_CLASS = "is-shown";
+const LOADER_ACTIVE_CLASS = 'is-shown';
+const HIDDEN_CLASS = 'is-hidden';
 
 let lightboxInstance = null;
 
 function ensureLightbox() {
   if (!lightboxInstance) {
-    lightboxInstance = new SimpleLightbox(".gallery a", {
-      captionsData: "alt",
+    lightboxInstance = new SimpleLightbox('.gallery a', {
+      captionsData: 'alt',
       captionDelay: 250,
     });
   } else {
@@ -37,14 +39,14 @@ export function createGallery(images) {
           </div>
         </li>`
     )
-    .join("");
+    .join('');
 
-  galleryContainer.insertAdjacentHTML("beforeend", markup);
+  galleryContainer.insertAdjacentHTML('beforeend', markup);
   ensureLightbox();
 }
 
 export function clearGallery() {
-  galleryContainer.innerHTML = "";
+  galleryContainer.innerHTML = '';
   if (lightboxInstance) {
     lightboxInstance.destroy();
     lightboxInstance = null;
@@ -54,11 +56,28 @@ export function clearGallery() {
 export function showLoader() {
   if (!loaderEl) return;
   loaderEl.classList.add(LOADER_ACTIVE_CLASS);
-  loaderEl.setAttribute("aria-hidden", "false");
+  loaderEl.setAttribute('aria-hidden', 'false');
 }
 
 export function hideLoader() {
   if (!loaderEl) return;
   loaderEl.classList.remove(LOADER_ACTIVE_CLASS);
-  loaderEl.setAttribute("aria-hidden", "true");
+  loaderEl.setAttribute('aria-hidden', 'true');
+}
+
+export function showLoadMoreButton() {
+  if (!loadMoreBtn) return;
+  loadMoreBtn.classList.remove(HIDDEN_CLASS);
+}
+
+export function hideLoadMoreButton() {
+  if (!loadMoreBtn) return;
+  loadMoreBtn.classList.add(HIDDEN_CLASS);
+}
+
+export function getGalleryFirstCardHeight() {
+  const firstItem = galleryContainer.querySelector('.gallery-item');
+  if (!firstItem) return 0;
+  const { height } = firstItem.getBoundingClientRect();
+  return height;
 }
